@@ -1,6 +1,6 @@
 {
-  "name": "jonathan-martz/magento2-supportform",
-  "description": "Support Form",
+  "name": "jonathan-martz/magento2-usage-stats",
+  "description": "Magento2 UsageStats",
   "authors": [
     {
       "name": "Jonathan Martz",
@@ -17,7 +17,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "JonathanMartz\\SupportForm\\": "."
+      "JonathanMartz\\UsageStats\\": "."
     }
   }
 }
