@@ -4,8 +4,8 @@
         <useagestats>
             <general>
                 <enable>1</enable>
-                <names>JonathanMartz</names>
-                <endpoint></endpoint>
+                <name>JonathanMartz</name>
+                <endpoint>https://api.jmartz.de</endpoint>
             </general>
         </useagestats>
     </default>
