@@ -11,35 +11,41 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Ping
 {
     const ENABLE = 'useagestats/general/enable';
-    const NAME = 'useagestats/general/name';
+    const NAMES = 'useagestats/general/names';
     const ENDPOINT = 'useagestats/general/endpoint';
 
     private $scopeConfig;
 
-    public function __construct(ScopeConfigInterface $scopeConfig) {
+    public function __construct(ScopeConfigInterface $scopeConfig)
+    {
         $this->scopeConfig = $scopeConfig;
     }
 
-    public function getNamespace(){
-        return (string) $this->scopeConfig->getValue(self::NAME);
+    public function getNamespaces(): array
+    {
+        return explode(',', $this->scopeConfig->getValue(self::NAMES));
     }
 
-    public function getEndpoint(){
-        return (string) $this->scopeConfig->getValue(self::ENDPOINT);
+    public function getEndpoint(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::ENDPOINT);
     }
 
-    public function isActive(){
-        return (bool) $this->scopeConfig->getValue(self::ENABLE);
+    public function isActive(): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::ENABLE);
     }
 
-    public function getModuleList(){
+    public function getModuleList(): array
+    {
         return [];
     }
 
-    public function ping(){
+    public function ping(): void
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->getEndpoint());
-        curl_setopt($ch,CURLOPT_USERAGENT,'Its me Mario ;)');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Its me Mario ;)');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->getModuleList()));
         curl_exec($ch);

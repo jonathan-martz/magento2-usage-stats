@@ -4,7 +4,7 @@
         <useagestats>
             <general>
                 <enable>1</enable>
-                <name>JonathanMartz</name>
+                <names>JonathanMartz</names>
                 <endpoint></endpoint>
             </general>
         </useagestats>
