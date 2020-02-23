@@ -2,14 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job instance="JonathanMartz\SupportForm\Cron\Clear" method="execute" name="supportrequest_clear">
-            <schedule>* 0 * * *</schedule>
-        </job>
-        <job instance="JonathanMartz\SupportForm\Cron\Connect" method="execute" name="supportrequest_connect">
-            <schedule>0 * * * *</schedule>
-        </job>
-        <job instance="JonathanMartz\SupportForm\Cron\FixType" method="execute" name="supportrequest_fixtype">
-            <schedule>0 * * * *</schedule>
+        <job instance="JonathanMartz\UsageStats\Cron\Ping" method="execute" name="usagestats_ping">
+            <schedule>0 0 * * 0</schedule>
         </job>
     </group>
 </config>

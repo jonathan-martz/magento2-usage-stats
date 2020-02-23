@@ -1,69 +1,55 @@
 <?php
 
-namespace JonathanMartz\SupportForm\Cron;
+namespace JonathanMartz\UsageStats\Cron;
 
-use Exception;
-use JonathanMartz\SupportForm\Model\RequestFactory;
-use JonathanMartz\SupportForm\Model\ResourceModel\CollectionFactory;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class Clear
- * @package JonathanMartz\SupportForm\Cron
+ * Class Ping
+ * @package JonathanMartz\UsageStats\Cron
  */
-class Clear
+class Ping
 {
-    /**
-     * @var CollectionFactory
-     */
-    private $supportrequest;
-    /**
-     * @var RequestFactory
-     */
-    private $requestFactory;
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
+    const ENABLE = 'useagestats/general/enable';
+    const NAME = 'useagestats/general/name';
+    const ENDPOINT = 'useagestats/general/endpoint';
 
+    private $scopeConfig;
 
-    /**
-     * Clear constructor.
-     * @param CollectionFactory $supportrequest
-     * @param RequestFactory $requestFactory
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        CollectionFactory $supportrequest,
-        RequestFactory $requestFactory,
-        CustomerRepositoryInterface $customerRepository
-    ) {
-        $this->supportrequest = $supportrequest;
-        $this->requestFactory = $requestFactory;
-        $this->customerRepository = $customerRepository;
+    public function __construct(ScopeConfigInterface $scopeConfig) {
+        $this->scopeConfig = $scopeConfig;
     }
 
-    /**
-     *
-     */
+    public function getNamespace(){
+        return (string) $this->scopeConfig->getValue(self::NAME);
+    }
+
+    public function getEndpoint(){
+        return (string) $this->scopeConfig->getValue(self::ENDPOINT);
+    }
+
+    public function isActive(){
+        return (bool) $this->scopeConfig->getValue(self::ENABLE);
+    }
+
+    public function getModuleList(){
+        return [];
+    }
+
+    public function ping(){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->getEndpoint());
+        curl_setopt($ch,CURLOPT_USERAGENT,'Its me Mario ;)');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->getModuleList()));
+        curl_exec($ch);
+        curl_close($ch);
+    }
+
     public function execute()
     {
-        $collection = $this->supportrequest->create();
-        $collection->addFieldToFilter('customer_id', ['neq' => null])->setPageSize(10)->setCurPage(1);
-        $requests = $collection->getItems();
-
-        if(count($requests) > 0) {
-            foreach($requests as $id => $model) {
-
-                try {
-                    $this->customerRepository->get($model->getData('email'), 1);
-                }
-                catch(Exception $e) {
-                    $model->delete();
-                }
-            }
+        if($this->isActive()){
+            $this->ping();
         }
     }
 }

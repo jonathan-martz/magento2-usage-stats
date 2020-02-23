@@ -1,11 +1,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <supportrequest>
+        <useagestats>
             <general>
                 <enable>1</enable>
-                <type>general,technical</type>
+                <name>JonathanMartz</name>
+                <endpoint></endpoint>
             </general>
-        </supportrequest>
+        </useagestats>
     </default>
 </config>
